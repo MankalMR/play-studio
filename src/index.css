@@ -13,7 +13,15 @@
 }
 
 body {
-  @apply bg-bg-dark text-white font-sans antialiased;
+  @apply font-sans antialiased;
+}
+
+.dark {
+  @apply bg-bg-dark text-white;
+}
+
+.light {
+  @apply bg-[#fff8f4] text-[#1f1b17];
 }
 
 .texture-linen {
