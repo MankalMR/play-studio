@@ -13,6 +13,8 @@ import PegSolitaireUI from "./games/peg-solitaire/UI.tsx";
 import PegSolitaireRules from "./games/peg-solitaire/Rules.tsx";
 import BoggleUI from "./games/boggle/UI.tsx";
 import BoggleRules from "./games/boggle/Rules.tsx";
+import WordWheelUI from "./games/word-wheel/UI.tsx";
+import WordWheelRules from "./games/word-wheel/Rules.tsx";
 
 function GameWrapper() {
   const { gameId } = useParams();
@@ -22,7 +24,7 @@ function GameWrapper() {
     return (
       <>
         <Helmet>
-          <title>Peg Solitaire - Family Game Shelf</title>
+          <title>Peg Solitaire - The Archive</title>
           <meta name="description" content="Play the classic Peg Solitaire board game. Strategy and logic in a premium parlor theme." />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
         </Helmet>
@@ -35,11 +37,24 @@ function GameWrapper() {
     return (
       <>
         <Helmet>
-          <title>Boggle - Family Game Shelf</title>
+          <title>Boggle - The Archive</title>
           <meta name="description" content="Play the fast-paced word discovery game. Hunt for words in a scrambled grid." />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
         </Helmet>
         <BoggleUI onShowRules={() => navigate(`/boggle/rules`)} />
+      </>
+    );
+  }
+
+  if (gameId === "word-wheel") {
+    return (
+      <>
+        <Helmet>
+          <title>Wordwheel Cross - The Archive</title>
+          <meta name="description" content="Spin to find, place to cross. A hybrid word discovery and crossword experience." />
+          <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
+        </Helmet>
+        <WordWheelUI />
       </>
     );
   }
@@ -60,7 +75,7 @@ function RulesWrapper() {
     return (
       <>
         <Helmet>
-          <title>Rules: Peg Solitaire - Family Game Shelf</title>
+          <title>Rules: Peg Solitaire - The Archive</title>
           <meta name="description" content="Learn how to play Peg Solitaire. Master the objective and moves of this classic strategy puzzle." />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}/rules`} />
         </Helmet>
@@ -73,11 +88,24 @@ function RulesWrapper() {
     return (
       <>
         <Helmet>
-          <title>Rules: Boggle - Family Game Shelf</title>
+          <title>Rules: Boggle - The Archive</title>
           <meta name="description" content="Learn how to play Boggle. Find words, score points, and beat the clock." />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}/rules`} />
         </Helmet>
         <BoggleRules onStart={() => navigate(`/boggle`)} />
+      </>
+    );
+  }
+
+  if (gameId === "word-wheel") {
+    return (
+      <>
+        <Helmet>
+          <title>Rules: Wordwheel Cross - The Archive</title>
+          <meta name="description" content="Learn how to play Wordwheel Cross. Master the spin and solve the grid." />
+          <link rel="canonical" href={`https://play.mankala.space/${gameId}/rules`} />
+        </Helmet>
+        <WordWheelRules onStart={() => navigate(`/word-wheel`)} />
       </>
     );
   }
@@ -96,9 +124,9 @@ function AppContent() {
   };
 
   const getActiveGameTitle = (): string => {
-    if (location.pathname === "/") return "Family Game Shelf";
+    if (location.pathname === "/") return "The Archive";
     const game = GAMES_REGISTRY.find(g => location.pathname.includes(g.id));
-    return game ? game.title : "Family Game Shelf";
+    return game ? game.title : "The Archive";
   };
 
   return (
@@ -115,7 +143,7 @@ function AppContent() {
         <Route path="/" element={
           <>
             <Helmet>
-              <title>Family Game Shelf - Classic Board Games & Puzzles</title>
+              <title>The Archive - Classic Game Collection</title>
               <meta name="description" content="A curated collection of classic tactile puzzles and board games. Play Peg Solitaire, Rummy, and more." />
               <link rel="canonical" href="https://play.mankala.space/" />
             </Helmet>

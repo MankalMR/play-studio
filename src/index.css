@@ -10,6 +10,70 @@
   --color-bg-dark: #080808;
   --color-surface-dark: #131313;
   --color-surface-high: #1c1b1b;
+
+  --animate-fade-in: fadeIn 1s ease-in-out;
+  --animate-slide-in-up: slideInUp 0.5s ease-out;
+  --animate-gradient: gradientShift 5s linear infinite;
+  --animate-reverse-ping: reversePing 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-rotate-gradient: rotate-gradient 7s linear infinite;
+
+  @keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes slideInUp {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  @keyframes gradientShift {
+    0% { background-position: 200% 0%; }
+    100% { background-position: 0% 0%; }
+  }
+
+  @keyframes rotate-gradient {
+    from { --gradient-angle: 0deg; }
+    to { --gradient-angle: 360deg; }
+  }
+
+  @keyframes reversePing {
+    0% { transform: scale(2); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+}
+
+@custom-variant short (@media (max-height: 920px));
+@custom-variant compact (@media (max-height: 1024px));
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.rainbow-border {
+  border: 2px solid transparent;
+  background-image:
+    linear-gradient(#000, #000),
+    conic-gradient(from var(--gradient-angle),
+      #4285f4,
+      #bb55a1,
+      #ea4335,
+      #fbbc04,
+      #b9d84c,
+      #38a852,
+      #4285f4);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.white-button {
+  transition: opacity 0.4s ease-in-out;
+}
+
+.white-button:hover {
+  opacity: 0.8;
 }
 
 body {

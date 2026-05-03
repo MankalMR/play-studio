@@ -30,10 +30,13 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
         >
           <Settings size={20} />
         </button>
-        <h1 className={`font-serif italic text-lg font-bold tracking-tight transition-colors duration-300
-          ${settings.darkMode ? 'text-primary' : 'text-[#416352]'}`}>
-          {title || "Family Game Shelf"}
-        </h1>
+        <div className="flex items-center gap-3">
+          <img src="/logo.png" alt="The Archive" className="w-8 h-8 object-contain" />
+          <h1 className={`font-serif italic text-lg font-bold tracking-tight transition-colors duration-300
+            ${settings.darkMode ? 'text-primary' : 'text-[#416352]'}`}>
+            {title || "The Archive"}
+          </h1>
+        </div>
         <button 
           onClick={() => onTabChange("rules")}
           className={`p-2 transition-colors ${activeTab === 'rules' ? (settings.darkMode ? 'text-primary' : 'text-[#416352]') : 'text-zinc-500 hover:text-primary'}`}
@@ -96,7 +99,7 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
                 />
               </div>
               <div className={`${settings.darkMode ? 'bg-white/5' : 'bg-black/5'} p-6 text-center`}>
-                <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 font-manrope">Version 1.0.4 • Family Game Shelf</p>
+                <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 font-manrope">Version 1.0.4 • The Archive</p>
               </div>
             </motion.div>
           </div>

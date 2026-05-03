@@ -1,6 +1,0 @@
-{
-  "name": "Remix: Word wheel",
-  "description": "Connect letters in a continuous line to form words. Guess the right words and they’ll fill in the crossword grid. Solve each word to complete the level!",
-  "requestFramePermissions": [],
-  "majorCapabilities": []
-}

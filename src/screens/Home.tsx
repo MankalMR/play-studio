@@ -8,7 +8,7 @@ interface HomeProps {
 }
 
 export default function Home({ onSelectGame }: HomeProps) {
-  const featuredGameIds = ["peg-solitaire", "boggle"];
+  const featuredGameIds = ["word-wheel", "peg-solitaire", "boggle"];
   const featuredGames = GAMES_REGISTRY.filter(g => featuredGameIds.includes(g.id));
   const otherGames = GAMES_REGISTRY.filter(g => !featuredGameIds.includes(g.id));
 
