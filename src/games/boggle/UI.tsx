@@ -309,10 +309,10 @@ function Tile({ tile, isSelected, isLast, onPointerDown, onPointerEnter }: {
           ? 'bg-primary dark:bg-primary scale-[1.03] z-10 shadow-[0_0_25px_rgba(233,193,118,0.5)]' 
           : 'bg-white dark:bg-zinc-800 shadow-[4px_4px_0_rgba(0,0,0,0.1)] dark:shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-[2px] active:shadow-none font-bold'}`}
     >
-      <span className={`text-2xl md:text-4xl font-black select-none pointer-events-none drop-shadow-sm
-        ${isSelected ? 'text-white dark:text-bg-dark' : 'text-zinc-800 dark:text-white'}
+      <span className={`text-2xl md:text-4xl font-black select-none pointer-events-none drop-shadow-sm flex items-center justify-center min-w-[1ch] min-h-[1em]
+        ${isSelected ? 'text-white dark:text-zinc-950' : 'text-zinc-800 dark:text-white'}
         ${tile.letter === "Qu" ? 'text-xl md:text-3xl' : ''}`}>
-        {tile.letter}
+        {tile.letter || "?"}
       </span>
       
       {/* Visual Ripple for last selected */}

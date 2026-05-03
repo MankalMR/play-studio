@@ -22,21 +22,29 @@ export function generateSeed(): string {
 
 // Simple seeded random to ensure shared boards later
 class SeededRandom {
-  private seed: number;
+  private state: number;
+
   constructor(seedStr: string) {
-    let t = 0;
-    for (let i = 0; i < seedStr.length; i++) t = (t << 5) - t + seedStr.charCodeAt(i);
-    this.seed = t;
+    // A simple hash to convert string to numeric seed
+    let hash = 0;
+    for (let i = 0; i < seedStr.length; i++) {
+      hash = ((hash << 5) - hash) + seedStr.charCodeAt(i);
+      hash |= 0; // Convert to 32bit integer
+    }
+    this.state = Math.abs(hash) || 1;
   }
+
+  // Linear Congruential Generator
   next(): number {
-    this.seed = (this.seed * 9301 + 49297) % 233280;
-    return this.seed / 233280;
+    this.state = (this.state * 1664525 + 1013904223) % 4294967296;
+    return this.state / 4294967296;
   }
 }
 
 export function generateBoard(size: BoardSize, seed: string): BoggleBoard {
   const rng = new SeededRandom(seed);
-  const dice = size === 5 ? [...DICE_5X5] : [...DICE_4X4];
+  const diceSource = size === 5 ? [...DICE_5X5] : [...DICE_4X4];
+  const dice = [...diceSource];
   
   // Shuffle dice
   for (let i = dice.length - 1; i > 0; i--) {
@@ -49,10 +57,13 @@ export function generateBoard(size: BoardSize, seed: string): BoggleBoard {
     tiles[r] = [];
     for (let c = 0; c < size; c++) {
       const idx = r * size + c;
-      const die = dice[idx] || "AAAAAA";
-      const letter = die[Math.floor(rng.next() * die.length)];
+      const die = dice[idx] || (size === 5 ? DICE_5X5[idx % 25] : DICE_4X4[idx % 16]);
+      
+      const charIdx = Math.floor(rng.next() * die.length);
+      const dieLetter = die[charIdx] || "A";
+      
       tiles[r][c] = {
-        letter: letter === "Q" ? "Qu" : letter,
+        letter: dieLetter === "Q" ? "Qu" : dieLetter,
         row: r,
         col: c,
         id: `${r}-${c}`
