@@ -10,21 +10,26 @@ interface BoggleUIProps {
   onShowRules: () => void;
 }
 
-const ROUND_DURATION = 180; // 3 minutes
-
 export default function BoggleUI({ onShowRules }: BoggleUIProps) {
   const [gameState, setGameState] = useState<"setup" | "playing" | "summary">("setup");
   const [boardSize, setBoardSize] = useState<BoardSize>(4);
   const [minWordLength, setMinWordLength] = useState<number>(3);
+  const [roundDuration, setRoundDuration] = useState<number>(120);
   const [board, setBoard] = useState<BoggleBoard | null>(null);
-  const [timeLeft, setTimeLeft] = useState(ROUND_DURATION);
+  const [timeLeft, setTimeLeft] = useState(120);
   
   const [currentPath, setCurrentPath] = useState<string[]>([]); // tile IDs
   const [foundWords, setFoundWords] = useState<WordPath[]>([]);
   const [invalidWords, setInvalidWords] = useState<string[]>([]);
+  const [feedbackPath, setFeedbackPath] = useState<string[]>([]);
+  const [feedbackType, setFeedbackType] = useState<'success' | 'error' | null>(null);
+  
+  const [isReplaying, setIsReplaying] = useState(false);
+  const [replayIdx, setReplayIdx] = useState(-1);
   
   const isPointerDown = useRef(false);
   const timerRef = useRef<number | null>(null);
+  const replayTimeoutRef = useRef<number | null>(null);
 
   // Initialize
   useEffect(() => {
@@ -49,17 +54,46 @@ export default function BoggleUI({ onShowRules }: BoggleUIProps) {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [gameState, timeLeft]);
 
-  const startNewGame = (size: BoardSize, minLen: number) => {
+  const startNewGame = (size: BoardSize, minLen: number, duration: number) => {
     const seed = generateSeed();
     const newBoard = generateBoard(size, seed);
     setBoard(newBoard);
     setBoardSize(size);
     setMinWordLength(minLen);
-    setTimeLeft(ROUND_DURATION);
+    setRoundDuration(duration);
+    setTimeLeft(duration);
     setFoundWords([]);
     setInvalidWords([]);
     setCurrentPath([]);
+    setFeedbackPath([]);
+    setFeedbackType(null);
+    setIsReplaying(false);
     setGameState("playing");
+  };
+
+  // Replay Logic
+  useEffect(() => {
+    if (isReplaying) {
+      if (replayIdx < foundWords.length) {
+        const word = foundWords[replayIdx];
+        setFeedbackPath(word.path);
+        setFeedbackType('success');
+        
+        replayTimeoutRef.current = window.setTimeout(() => {
+          setReplayIdx(prev => prev + 1);
+        }, 1200);
+      } else {
+        setIsReplaying(false);
+        setFeedbackPath([]);
+        setFeedbackType(null);
+      }
+    }
+    return () => { if (replayTimeoutRef.current) clearTimeout(replayTimeoutRef.current); };
+  }, [isReplaying, replayIdx, foundWords]);
+
+  const startReplay = () => {
+    setIsReplaying(true);
+    setReplayIdx(0);
   };
 
   const handlePointerDown = (tileId: string) => {
@@ -107,17 +141,26 @@ export default function BoggleUI({ onShowRules }: BoggleUIProps) {
     const word = currentPath.map(id => getTileById(id)?.letter).join("").toUpperCase();
     
     // Check if already found
-    if (foundWords.some(w => w.word === word)) {
-      setCurrentPath([]);
-      return;
-    }
+    const alreadyFound = foundWords.some(w => w.word === word);
+    const valid = !alreadyFound && isValidWord(word);
 
-    if (isValidWord(word)) {
+    // Set visual feedback
+    setFeedbackPath([...currentPath]);
+    setFeedbackType(valid ? 'success' : 'error');
+
+    if (valid) {
       setFoundWords(prev => [...prev, { word, path: [...currentPath] }]);
-    } else {
+    } else if (!alreadyFound) {
       setInvalidWords(prev => [...prev, word]);
     }
+    
     setCurrentPath([]);
+
+    // Clear feedback animation after animation completes
+    setTimeout(() => {
+      setFeedbackPath([]);
+      setFeedbackType(null);
+    }, 600);
   };
 
   const getTileById = (id: string): BoggleTile | undefined => {
@@ -149,9 +192,13 @@ export default function BoggleUI({ onShowRules }: BoggleUIProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-4 text-right">
+        <div className="flex items-center gap-6 text-right">
+          <div className="hidden sm:block">
+            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-zinc-500">Words</p>
+            <p className="text-xl font-mono font-bold text-white">{foundWords.length}</p>
+          </div>
           <div>
-            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-zinc-500">Current Score</p>
+            <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-zinc-500">Score</p>
             <p className="text-xl font-mono font-bold text-primary">{totalScore}</p>
           </div>
           <div className="p-3 rounded-2xl bg-primary/20 text-primary">
@@ -163,53 +210,89 @@ export default function BoggleUI({ onShowRules }: BoggleUIProps) {
       {/* Main Game Area */}
       <div className="flex-grow flex flex-col md:flex-row p-4 md:p-8 gap-8 overflow-hidden items-center justify-center">
         
-        {/* Word Display Area */}
-        <div className="w-full max-w-[200px] hidden md:flex flex-col gap-4 self-stretch">
-          <h3 className="text-xs uppercase font-bold tracking-[0.2em] text-zinc-500">Found Words ({foundWords.length})</h3>
-          <div className="flex-grow overflow-y-auto scrollbar-hide space-y-2 pr-2">
-            {[...foundWords].reverse().map((w, i) => (
-              <motion.div 
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                key={i} 
-                className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-white/5 border border-black/5 dark:border-white/5"
-              >
-                <span className="font-bold text-zinc-700 dark:text-zinc-200">{w.word}</span>
-                <span className="text-xs text-primary font-mono">{calculateScore(w.word, boardSize, minWordLength)}</span>
-              </motion.div>
-            ))}
+        {/* Word Display Area - Only shown in Summary/Replay mode if requested, hidden during play */}
+        {isReplaying && (
+          <div className="w-full max-w-[200px] hidden md:flex flex-col gap-4 self-stretch">
+            <h3 className="text-xs uppercase font-bold tracking-[0.2em] text-zinc-500">Replaying...</h3>
+            <div className="flex-grow overflow-y-auto scrollbar-hide space-y-2 pr-2">
+              {foundWords.map((w, i) => (
+                <div 
+                  key={i} 
+                  className={`flex items-center justify-between p-3 rounded-xl border transition-all
+                    ${i === replayIdx ? 'bg-primary border-primary text-bg-dark scale-105' : 'bg-white/5 border-white/5 text-zinc-400'}`}
+                >
+                  <span className="font-bold">{w.word}</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Replay Controls - Only visible during replay */}
+        {isReplaying && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="absolute top-24 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2"
+          >
+             <button 
+               onClick={() => {
+                 setIsReplaying(false);
+                 setFeedbackPath([]);
+                 setFeedbackType(null);
+               }}
+               className="px-6 py-2 bg-red-500 text-white font-bold rounded-full shadow-xl flex items-center gap-2 hover:bg-red-600 transition-colors"
+             >
+               <X size={18} /> Stop Replay
+             </button>
+             <div className="px-4 py-1 bg-black/40 backdrop-blur-md rounded-full text-[10px] text-white/70 uppercase tracking-widest font-bold border border-white/10">
+                Word {replayIdx + 1} of {foundWords.length}
+             </div>
+          </motion.div>
+        )}
 
         {/* Board */}
         <div className="relative flex flex-col items-center gap-6">
            {/* Current Word Preview */}
            <div className="h-12 flex items-center justify-center">
               <AnimatePresence mode="wait">
-                {currentPath.length > 0 && (
+                {(currentPath.length > 0 || (isReplaying && replayIdx >= 0)) && (
                   <motion.div 
+                    key={isReplaying ? `replay-${replayIdx}` : 'current'}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
-                    className="px-6 py-2 rounded-full bg-primary text-white dark:text-bg-dark font-black tracking-[0.2em] text-xl shadow-xl border-2 border-white/20"
+                    className={`px-6 py-2 rounded-full font-black tracking-[0.2em] text-xl shadow-xl border-2 border-white/20
+                      ${isReplaying ? 'bg-primary text-zinc-950' : 'bg-primary text-zinc-950'}`}
                   >
-                    {currentPath.map(id => getTileById(id)?.letter).join("")}
+                    {isReplaying 
+                      ? foundWords[replayIdx]?.word 
+                      : currentPath.map(id => getTileById(id)?.letter).join("")}
                   </motion.div>
                 )}
               </AnimatePresence>
            </div>
 
-           <div 
-             className={`grid gap-2 md:gap-3 p-2 md:p-3 rounded-3xl bg-zinc-200 dark:bg-surface-dark border-4 border-zinc-300 dark:border-white/5 shadow-2xl touch-none select-none
-               ${boardSize === 4 ? 'grid-cols-4' : 'grid-cols-5'}`}
-             style={{ width: 'min(90vw, 500px)', aspectRatio: '1/1' }}
-           >
-            {board?.tiles?.flat().map((tile) => (
+            <div 
+              className={`grid gap-2 md:gap-3 p-2 md:p-3 rounded-3xl bg-zinc-200 dark:bg-zinc-900 border-4 border-zinc-300 dark:border-white/5 shadow-2xl touch-none select-none relative
+                ${boardSize === 4 ? 'grid-cols-4' : 'grid-cols-5'}`}
+              style={{ width: 'min(90vw, 500px)', aspectRatio: '1/1' }}
+            >
+             {/* Word Stream (Path Line) */}
+             <WordPathLine 
+                path={currentPath.length > 0 ? currentPath : feedbackPath}
+                boardSize={boardSize}
+                feedbackType={feedbackPath.length > 0 ? feedbackType : null}
+                allTiles={board?.tiles?.flat() || []}
+             />
+
+             {board?.tiles?.flat().map((tile) => (
                <Tile 
                  key={tile.id} 
                  tile={tile} 
-                 isSelected={currentPath.includes(tile.id)}
+                 isSelected={currentPath.includes(tile.id) || feedbackPath.includes(tile.id)}
                  isLast={currentPath[currentPath.length - 1] === tile.id}
+                 feedbackType={feedbackPath.includes(tile.id) ? feedbackType : null}
                  onPointerDown={() => handlePointerDown(tile.id)}
                  onPointerEnter={() => handlePointerEnter(tile.id)}
                />
@@ -217,19 +300,12 @@ export default function BoggleUI({ onShowRules }: BoggleUIProps) {
            </div>
         </div>
 
-        {/* Mobile Words Bar */}
-        <div className="md:hidden w-full flex gap-2 overflow-x-auto py-2 scrollbar-hide shrink-0">
-             {[...foundWords].reverse().slice(0, 5).map((w, i) => (
-                <div key={i} className="whitespace-nowrap px-4 py-2 rounded-full bg-white dark:bg-white/5 border border-black/5 dark:border-white/5 text-sm font-bold">
-                  {w.word} <span className="text-primary ml-1 text-xs">{calculateScore(w.word, boardSize, minWordLength)}</span>
-                </div>
-             ))}
-        </div>
+        {/* Removed Mobile Words Bar during play */}
       </div>
 
       {/* Summary Modal */}
       <AnimatePresence>
-        {gameState === "summary" && (
+        {gameState === "summary" && !isReplaying && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
              <motion.div 
                initial={{ opacity: 0 }} 
@@ -269,14 +345,21 @@ export default function BoggleUI({ onShowRules }: BoggleUIProps) {
 
                 <div className="p-8 border-t border-white/5 flex gap-4">
                    <button 
+                     onClick={() => startReplay()}
+                     disabled={foundWords.length === 0}
+                     className="flex-grow py-4 bg-white/10 text-white font-bold rounded-2xl hover:bg-white/20 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+                   >
+                     <Play size={18} /> Review Selection
+                   </button>
+                   <button 
                      onClick={() => setGameState("setup")}
-                     className="flex-grow py-4 border border-white/10 text-white font-bold rounded-2xl hover:bg-white/5 transition-colors"
+                     className="px-8 py-4 border border-white/10 text-white font-bold rounded-2xl hover:bg-white/5 transition-colors"
                    >
                      Menu
                    </button>
                    <button 
-                     onClick={() => startNewGame(boardSize, minWordLength)}
-                     className="flex-grow py-4 bg-primary text-bg-dark font-bold rounded-2xl hover:brightness-110 shadow-lg"
+                     onClick={() => startNewGame(boardSize, minWordLength, roundDuration)}
+                     className="flex-grow py-4 bg-primary text-zinc-950 font-bold rounded-2xl hover:brightness-110 shadow-lg"
                    >
                      Play Again
                    </button>
@@ -289,14 +372,75 @@ export default function BoggleUI({ onShowRules }: BoggleUIProps) {
   );
 }
 
-function Tile({ tile, isSelected, isLast, onPointerDown, onPointerEnter }: { 
+function WordPathLine({ path, boardSize, feedbackType, allTiles }: { 
+  path: string[], 
+  boardSize: number, 
+  feedbackType: 'success' | 'error' | null,
+  allTiles: BoggleTile[]
+}) {
+  if (path.length < 2) return null;
+
+  const color = feedbackType === 'success' ? '#22c55e' : feedbackType === 'error' ? '#ef4444' : '#e9c176';
+  
+  const points = path.map(id => {
+    const tile = allTiles.find(t => t.id === id);
+    if (!tile) return null;
+    return { x: (tile.col + 0.5) * (100 / boardSize), y: (tile.row + 0.5) * (100 / boardSize) };
+  }).filter((p): p is {x: number, y: number} => p !== null);
+
+  if (points.length < 2) return null;
+
+  const d = points.reduce((acc, p, i) => i === 0 ? `M ${p.x} ${p.y}` : `${acc} L ${p.x} ${p.y}`, "");
+
+  return (
+    <svg 
+      className="absolute inset-0 pointer-events-none z-10 overflow-visible"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+    >
+      <motion.path
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        d={d}
+        fill="none"
+        stroke={color}
+        strokeWidth="5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{ 
+          filter: `drop-shadow(0 0 12px ${color})`,
+          opacity: feedbackType ? 0.9 : 0.7
+        }}
+      />
+    </svg>
+  );
+}
+
+function Tile({ tile, isSelected, isLast, feedbackType, onPointerDown, onPointerEnter }: { 
   tile: BoggleTile; 
   isSelected: boolean; 
   isLast: boolean;
+  feedbackType?: 'success' | 'error' | null;
   onPointerDown: () => void;
   onPointerEnter: () => void;
   key?: string | number;
 }) {
+  const getFeedbackBg = () => {
+    if (feedbackType === 'success') return 'bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.4)] scale-105 z-20';
+    if (feedbackType === 'error') return 'bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.4)] scale-95 z-20';
+    return isSelected 
+      ? 'bg-primary dark:bg-primary scale-[1.03] z-20 shadow-[0_0_20px_rgba(233,193,118,0.4)]' 
+      : 'bg-white dark:bg-zinc-800 shadow-[2px_2px_0_rgba(0,0,0,0.1)] dark:shadow-[2px_2px_0_rgba(0,0,0,0.5)] active:translate-y-[1px] active:shadow-none font-bold z-0';
+  };
+
+  const getFeedbackText = () => {
+    if (feedbackType === 'success') return 'text-white';
+    if (feedbackType === 'error') return 'text-white';
+    return isSelected ? 'text-zinc-950 dark:text-zinc-950' : 'text-zinc-800 dark:text-zinc-100';
+  };
+
   return (
     <div 
       onPointerDown={(e) => {
@@ -305,18 +449,16 @@ function Tile({ tile, isSelected, isLast, onPointerDown, onPointerEnter }: {
       }}
       onPointerEnter={onPointerEnter}
       className={`relative rounded-xl md:rounded-2xl flex items-center justify-center cursor-pointer transition-all duration-300
-        ${isSelected 
-          ? 'bg-primary dark:bg-primary scale-[1.03] z-10 shadow-[0_0_25px_rgba(233,193,118,0.5)]' 
-          : 'bg-white dark:bg-zinc-800 shadow-[4px_4px_0_rgba(0,0,0,0.1)] dark:shadow-[4px_4px_0_rgba(0,0,0,0.5)] active:translate-y-[2px] active:shadow-none font-bold'}`}
+        ${getFeedbackBg()}`}
     >
-      <span className={`text-2xl md:text-4xl font-black select-none pointer-events-none drop-shadow-sm flex items-center justify-center min-w-[1ch] min-h-[1em]
-        ${isSelected ? 'text-white dark:text-zinc-950' : 'text-zinc-800 dark:text-white'}
+      <span className={`text-2xl md:text-4xl font-black select-none pointer-events-none drop-shadow-md flex items-center justify-center min-w-[1ch] min-h-[1em] relative z-30
+        ${getFeedbackText()}
         ${tile.letter === "Qu" ? 'text-xl md:text-3xl' : ''}`}>
         {tile.letter || "?"}
       </span>
       
       {/* Visual Ripple for last selected */}
-      {isLast && (
+      {isLast && !feedbackType && (
         <motion.div 
           layoutId="highlight"
           className="absolute inset-0 border-2 border-white/50 rounded-xl md:rounded-2xl"

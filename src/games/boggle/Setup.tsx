@@ -4,12 +4,13 @@ import { BoardSize } from "./types";
 import { LayoutGrid, Grid3X3 } from "lucide-react";
 
 interface BoggleSetupProps {
-  onStart: (size: BoardSize, minWordLength: number) => void;
+  onStart: (size: BoardSize, minWordLength: number, duration: number) => void;
 }
 
 export default function BoggleSetup({ onStart }: BoggleSetupProps) {
   const [size, setSize] = React.useState<BoardSize>(4);
   const [minLen, setMinLen] = React.useState<number>(3);
+  const [duration, setDuration] = React.useState<number>(120); // Default 2 mins
 
   return (
     <div className="flex flex-col items-center justify-center p-8 gap-12 h-full text-center">
@@ -42,27 +43,46 @@ export default function BoggleSetup({ onStart }: BoggleSetupProps) {
           </div>
         </div>
 
-        {/* Min Word Length Selection */}
-        <div className="space-y-6">
-          <h3 className="text-xs uppercase font-black tracking-widest text-primary">2. Minimum Word Length</h3>
-          <div className="flex justify-center gap-4">
-            {[3, 4].map(len => (
-              <button 
-                key={len}
-                onClick={() => setMinLen(len)}
-                className={`px-8 py-4 rounded-2xl font-bold border transition-all ${minLen === len 
-                  ? 'bg-primary text-white dark:text-bg-dark border-primary scale-105 shadow-lg' 
-                  : 'bg-white dark:bg-surface-high border-black/5 dark:border-white/5 text-zinc-500'}`}
-              >
-                {len}+ Letters
-              </button>
-            ))}
+        {/* Min Word Length & Timer Selection */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="space-y-6">
+            <h3 className="text-xs uppercase font-black tracking-widest text-primary">2. Min Word Length</h3>
+            <div className="flex justify-center gap-3">
+              {[3, 4].map(len => (
+                <button 
+                  key={len}
+                  onClick={() => setMinLen(len)}
+                  className={`flex-grow py-4 rounded-2xl font-bold border transition-all ${minLen === len 
+                    ? 'bg-primary text-zinc-950 border-primary scale-105 shadow-lg' 
+                    : 'bg-white dark:bg-zinc-800 border-black/5 dark:border-white/10 text-zinc-500'}`}
+                >
+                  {len}+ Letters
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <h3 className="text-xs uppercase font-black tracking-widest text-primary">3. Round Timer</h3>
+            <div className="flex justify-center gap-3">
+              {[60, 120, 180].map(sec => (
+                <button 
+                  key={sec}
+                  onClick={() => setDuration(sec)}
+                  className={`flex-grow py-4 rounded-2xl font-bold border transition-all ${duration === sec 
+                    ? 'bg-primary text-zinc-950 border-primary scale-105 shadow-lg' 
+                    : 'bg-white dark:bg-zinc-800 border-black/5 dark:border-white/10 text-zinc-500'}`}
+                >
+                  {sec / 60}m
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
         <button
-          onClick={() => onStart(size, minLen)}
-          className="w-full py-5 bg-primary text-white dark:text-bg-dark font-black text-xl rounded-[2rem] shadow-2xl hover:brightness-110 active:scale-95 transition-all mt-4"
+          onClick={() => onStart(size, minLen, duration)}
+          className="w-full py-5 bg-primary text-zinc-950 font-black text-xl rounded-[2rem] shadow-2xl hover:brightness-110 active:scale-95 transition-all mt-4"
         >
           START GAME
         </button>

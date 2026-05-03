@@ -79,22 +79,12 @@ export function calculateScore(word: string | undefined, size: BoardSize, minWor
   const len = word.length;
   if (len < minWordLength) return 0;
   
-  if (size === 4) {
-    if (len === 3 || len === 4) return 1;
-    if (len === 5) return 2;
-    if (len === 6) return 3;
-    if (len === 7) return 5;
-    return 11;
-  } else {
-    // Big Boggle Scoring typically ignores 3-letter words by default, 
-    // but we'll allow 1pt for 3-letters if user chose minLen 3
-    if (len === 3) return 1; 
-    if (len === 4) return 1;
-    if (len === 5) return 2;
-    if (len === 6) return 3;
-    if (len === 7) return 5;
-    return 11;
-  }
+  if (len === 3) return 1;
+  if (len === 4) return 2;
+  if (len === 5) return 3;
+  if (len === 6) return 5;
+  if (len === 7) return 8;
+  return 13; // 8+
 }
 
 export function areAdjacent(row1: number, col1: number, row2: number, col2: number): boolean {
