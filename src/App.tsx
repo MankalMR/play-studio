@@ -8,8 +8,11 @@ import { BrowserRouter, Routes, Route, useParams, useNavigate, useLocation } fro
 import { Helmet } from "react-helmet-async";
 import Layout from "./components/Layout.tsx";
 import Home from "./screens/Home.tsx";
+import { GAMES_REGISTRY } from "./registry/games.ts";
 import PegSolitaireUI from "./games/peg-solitaire/UI.tsx";
 import PegSolitaireRules from "./games/peg-solitaire/Rules.tsx";
+import BoggleUI from "./games/boggle/UI.tsx";
+import BoggleRules from "./games/boggle/Rules.tsx";
 
 function GameWrapper() {
   const { gameId } = useParams();
@@ -24,6 +27,19 @@ function GameWrapper() {
           <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
         </Helmet>
         <PegSolitaireUI onShowRules={() => navigate(`/peg-solitaire/rules`)} />
+      </>
+    );
+  }
+
+  if (gameId === "boggle") {
+    return (
+      <>
+        <Helmet>
+          <title>Boggle - Family Game Shelf</title>
+          <meta name="description" content="Play the fast-paced word discovery game. Hunt for words in a scrambled grid." />
+          <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
+        </Helmet>
+        <BoggleUI onShowRules={() => navigate(`/boggle/rules`)} />
       </>
     );
   }
@@ -53,6 +69,19 @@ function RulesWrapper() {
     );
   }
 
+  if (gameId === "boggle") {
+    return (
+      <>
+        <Helmet>
+          <title>Rules: Boggle - Family Game Shelf</title>
+          <meta name="description" content="Learn how to play Boggle. Find words, score points, and beat the clock." />
+          <link rel="canonical" href={`https://play.mankala.space/${gameId}/rules`} />
+        </Helmet>
+        <BoggleRules onStart={() => navigate(`/boggle`)} />
+      </>
+    );
+  }
+
   return <div className="p-20 text-center text-zinc-500">Rules not found.</div>;
 }
 
@@ -66,6 +95,12 @@ function AppContent() {
     return "game";
   };
 
+  const getActiveGameTitle = (): string => {
+    if (location.pathname === "/") return "Family Game Shelf";
+    const game = GAMES_REGISTRY.find(g => location.pathname.includes(g.id));
+    return game ? game.title : "Family Game Shelf";
+  };
+
   return (
     <Layout 
       activeTab={getActiveTab()} 
@@ -74,7 +109,7 @@ function AppContent() {
         // Note: game/rules tab behavior depends on having a gameId, 
         // we'll default to the last played or home
       }}
-      title={location.pathname === "/" ? "Family Game Shelf" : "Peg Solitaire"}
+      title={getActiveGameTitle()}
     >
       <Routes>
         <Route path="/" element={

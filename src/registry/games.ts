@@ -2,6 +2,16 @@ import { GameMetadata } from "./types";
 
 export const GAMES_REGISTRY: GameMetadata[] = [
   {
+    id: "boggle",
+    title: "Boggle",
+    subtitle: "Fast Word Search",
+    category: ["Word", "Fast-paced"],
+    status: "playable",
+    thumbnail: "https://images.unsplash.com/photo-1616628188502-413f2fe46e5e?q=80&w=1200&auto=format&fit=crop",
+    description: "Hunt for hidden words in a scrambled grid. Connect adjacent letters in a race against the clock.",
+    duration: "3 Min Rounds"
+  },
+  {
     id: "peg-solitaire",
     title: "Peg Solitaire",
     subtitle: "Classic Single-player Strategy",
@@ -20,15 +30,5 @@ export const GAMES_REGISTRY: GameMetadata[] = [
     thumbnail: "https://images.unsplash.com/photo-1543807535-eceef0bc6599?q=80&w=800&auto=format&fit=crop",
     description: "Classic card matching game for family gatherings.",
     players: "2-4 Players"
-  },
-  {
-    id: "boggle",
-    title: "Boggle",
-    subtitle: "Fast Word Search",
-    category: ["Word", "Fast-paced"],
-    status: "coming-soon",
-    thumbnail: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=800&auto=format&fit=crop",
-    description: "Shake the grid and find as many words as you can.",
-    duration: "3 Min Rounds"
   }
 ];
