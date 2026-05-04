@@ -32,6 +32,7 @@ Each game is self-contained. Navigate to `src/games/[game-id]/` to find:
 - [Boggle](src/games/boggle/)
 - [Peg Solitaire](src/games/peg-solitaire/)
 - [Wordwheel Cross](src/games/word-wheel/)
+- [Stretchy Cat](src/games/stretchy-cat/)
 
 </details>
 

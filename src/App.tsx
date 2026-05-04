@@ -15,6 +15,7 @@ import BoggleUI from "./games/boggle/UI.tsx";
 import BoggleRules from "./games/boggle/Rules.tsx";
 import WordWheelUI from "./games/word-wheel/UI.tsx";
 import WordWheelRules from "./games/word-wheel/Rules.tsx";
+import { UI as StretchyCatUI, Rules as StretchyCatRules } from "./games/stretchy-cat/index.ts";
 
 function GameWrapper() {
   const { gameId } = useParams();
@@ -55,6 +56,19 @@ function GameWrapper() {
           <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
         </Helmet>
         <WordWheelUI />
+      </>
+    );
+  }
+
+  if (gameId === "stretchy-cat") {
+    return (
+      <>
+        <Helmet>
+          <title>Stretchy Cat - The Archive</title>
+          <meta name="description" content="Stretch the cat to fill the board. A tactile path-finding puzzle." />
+          <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
+        </Helmet>
+        <StretchyCatUI />
       </>
     );
   }
@@ -106,6 +120,19 @@ function RulesWrapper() {
           <link rel="canonical" href={`https://play.mankala.space/${gameId}/rules`} />
         </Helmet>
         <WordWheelRules onStart={() => navigate(`/word-wheel`)} />
+      </>
+    );
+  }
+
+  if (gameId === "stretchy-cat") {
+    return (
+      <>
+        <Helmet>
+          <title>Rules: Stretchy Cat - The Archive</title>
+          <meta name="description" content="Learn how to play Stretchy Cat. Master the stretch and fill the grid." />
+          <link rel="canonical" href={`https://play.mankala.space/${gameId}/rules`} />
+        </Helmet>
+        <StretchyCatRules onStart={() => navigate(`/stretchy-cat`)} />
       </>
     );
   }

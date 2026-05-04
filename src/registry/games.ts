@@ -40,5 +40,15 @@ export const GAMES_REGISTRY: GameMetadata[] = [
     thumbnail: "https://images.unsplash.com/photo-1543807535-eceef0bc6599?q=80&w=800&auto=format&fit=crop",
     description: "Classic card matching game for family gatherings.",
     players: "2-4 Players"
+  },
+  {
+    id: "stretchy-cat",
+    title: "Stretchy Cat",
+    subtitle: "Tactile Path Puzzle",
+    category: ["Puzzle", "Logic"],
+    status: "playable",
+    thumbnail: "/stretchy-cat-thumb.png",
+    description: "Stretch the feline across the board to fill every space. A tactile, physics-based puzzle experience in the Archive collection.",
+    duration: "2-5 Min"
   }
 ];
