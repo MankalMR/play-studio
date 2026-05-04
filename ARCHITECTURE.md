@@ -38,6 +38,12 @@ Uses `react-router-dom` for deep linking.
 - `/:gameId`: The active game view.
 - `/:gameId/rules`: The instructions view for a specific game.
 
+### 5. SEO & Deep Linking
+To ensure deep links (e.g., `/word-wheel`) don't 404 on refresh and are indexed by crawlers:
+- **`vercel.json`**: Contains rewrites that direct all non-static requests to `index.html`.
+- **`public/sitemap.xml`**: Must be updated manually whenever a new game route is added to ensure crawler discovery.
+- **`react-helmet-async`**: Used in `App.tsx` to provide unique `<title>`, `<meta>`, and `canonical` tags for every route.
+
 ## Key Technologies
 - **React 19**: Modern UI framework.
 - **Vite 6**: Fast development and build tool.

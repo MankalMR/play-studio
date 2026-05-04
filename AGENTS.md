@@ -53,6 +53,9 @@ Each game is self-contained. Navigate to `src/games/[game-id]/` to find:
     2. Implement `UI.tsx` and `Rules.tsx`.
     3. Add metadata to `src/registry/games.ts`.
     4. Register the route in `src/App.tsx`.
+    5. **SEO Optimization**:
+        - Add `<Helmet>` tags in `App.tsx` (Title, Description, Canonical URL).
+        - Add the new route to `public/sitemap.xml`.
 - **Modifying Themes**:
     - Colors and tokens are defined in `src/index.css` via CSS variables.
     - Theme switching logic is in `src/components/Layout.tsx`.
