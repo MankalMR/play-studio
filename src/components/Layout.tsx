@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Settings, BookOpen, LayoutGrid, Play, X, Volume2, Moon, Eye } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -16,6 +16,22 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
     darkMode: true,
     highContrast: false
   });
+  
+  // Lock body scroll when a game is active
+  useEffect(() => {
+    if (activeTab === "game") {
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
+    }
+    
+    return () => {
+      document.body.style.overflow = "auto";
+      document.documentElement.style.overflow = "auto";
+    };
+  }, [activeTab]);
 
   return (
     <div className={`min-h-screen flex flex-col transition-colors duration-500 texture-linen selection:bg-primary/30 
@@ -107,7 +123,11 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="flex-grow pb-32 max-w-7xl mx-auto w-full">
+      <main className={`flex-grow w-full ${
+        activeTab === "game" 
+          ? "h-[calc(100vh-theme(spacing.16))] overflow-hidden touch-none" 
+          : "pb-32 max-w-7xl mx-auto"
+      }`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -115,6 +135,7 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
+            className={activeTab === "game" ? "h-full w-full" : ""}
           >
             {children}
           </motion.div>

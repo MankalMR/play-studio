@@ -69,7 +69,7 @@ function Scene() {
 
 function MankalaRunner() {
   return (
-    <div className="relative w-full h-screen bg-black overflow-hidden select-none">
+    <div className="relative w-full h-full bg-black overflow-hidden select-none">
       <HUD />
       <Canvas
         shadows
