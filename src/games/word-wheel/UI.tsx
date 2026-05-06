@@ -309,7 +309,7 @@ const WordWheelGame: React.FC = () => {
     )
 
   return (
-    <div className="w-full h-full flex flex-col mx-auto rounded-2xl justify-center max-w-[1320px]">
+    <div className="w-full min-h-full flex flex-col mx-auto rounded-2xl max-w-[1320px]">
       {state.showLevelModal && levelModal}
       {state.gameWon && (winModal)}
 
@@ -320,16 +320,16 @@ const WordWheelGame: React.FC = () => {
       `}</style>
       
       {/* Main Content Area - Grid and Wordwheel */}
-      <div className="flex flex-col short:md:flex-row short:md:flex-1 lg:flex-1 lg:flex-row overflow-hidden gap-2 sm:gap-6 md:gap-10 md:gap-10 lg:gap-4">
+      <div className="flex-grow flex flex-col short:md:flex-row short:md:flex-1 lg:flex-1 lg:flex-row items-center justify-center gap-8 p-4 pb-32">
         {/* Grid */}
-        <div className="flex short:md:flex-1 lg:flex-1 items-start md:items-center justify-center lg:max-w-1/2">
+        <div className="w-full flex items-center justify-center lg:max-w-1/2">
           {state.currentPuzzle && (
             <CrosswordGrid puzzle={state.currentPuzzle} foundWords={state.foundWords} key={`$[state.currentPuzzle.difficulty]-${state.currentPuzzle.letters}`} />
           )}
         </div>
 
         {/* Wordwheel Section */}
-        <div className="flex short:md:flex-1 short:md:justify-center lg:flex-1 flex-col items-center justify-start lg:justify-center relative">
+        <div className="w-full flex flex-col items-center justify-center relative">
           {/* Messaging / Guess Display */}
           <div className={`mb-[8px] sm:mb-[16px] short:md:mb-[16px] md:mb-[32px] mt-[8px] flex flex-col items-center whitespace-nowrap justify-center bg-white text-base text-black rounded-full font-medium px-7 py-2.5 leading-none ${!currentGuess && !uiMessage.text ? "invisible" : ""}`}>
             {currentGuess ? (

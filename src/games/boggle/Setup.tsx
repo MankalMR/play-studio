@@ -13,7 +13,7 @@ export default function BoggleSetup({ onStart }: BoggleSetupProps) {
   const [duration, setDuration] = React.useState<number>(120); // Default 2 mins
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 gap-12 h-full text-center">
+    <div className="flex flex-col items-center justify-center p-8 pb-32 min-h-full gap-12 text-center">
       <div className="space-y-4">
         <h2 className="text-4xl font-serif font-bold text-zinc-900 dark:text-zinc-100 italic transition-colors">Setup Your Hunt</h2>
         <p className="text-zinc-500 max-w-sm mx-auto">Customize your grid and challenge level.</p>

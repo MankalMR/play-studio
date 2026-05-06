@@ -20,6 +20,7 @@ export default function PegSolitaireUI({ onShowRules }: UIProps) {
   const isStuck = !hasMoves && !isWon;
 
   const legalMoves = useMemo(() => {
+    if (!selected) return [];
     return Engine.getLegalMoves(board, selected);
   }, [board, selected]);
 
@@ -78,7 +79,7 @@ export default function PegSolitaireUI({ onShowRules }: UIProps) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-8 py-8 md:py-12 px-4 h-full relative">
+    <div className="flex flex-col items-center justify-center gap-8 py-8 md:py-12 px-4 pb-32 min-h-full relative">
       {/* HUD */}
       <div className="flex flex-col items-center gap-2">
          <div className="bg-white dark:bg-surface-high border border-black/5 dark:border-white/10 px-6 py-2 rounded-full flex gap-4 items-center shadow-xl transition-colors">

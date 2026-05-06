@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Settings, BookOpen, LayoutGrid, Play, X, Volume2, Moon, Eye } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useInterfaceStore } from "../store/interfaceStore";
+import { useNavigate } from "react-router-dom";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,7 +18,13 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
     darkMode: true,
     highContrast: false
   });
-  const { isImmersive } = useInterfaceStore();
+  const { isImmersive, setImmersive } = useInterfaceStore();
+  const navigate = useNavigate();
+
+  const handleExit = () => {
+    setImmersive(false);
+    navigate("/");
+  };
   
   // Lock body scroll strictly during immersive gameplay
   useEffect(() => {
@@ -64,6 +71,22 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
           </button>
         </header>
       )}
+
+      {/* Floating Exit Button for Immersive Mode */}
+      <AnimatePresence>
+        {isImmersive && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, x: 20 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.8, x: 20 }}
+            onClick={handleExit}
+            className="fixed top-6 right-6 z-[1000] p-3 rounded-full bg-black/20 backdrop-blur-xl border border-white/10 text-white/50 hover:text-white hover:bg-black/40 transition-all active:scale-95 shadow-2xl group"
+            title="Exit Game"
+          >
+            <X size={24} className="group-hover:rotate-90 transition-transform duration-300" />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       {/* Settings Modal */}
       <AnimatePresence>
@@ -141,7 +164,7 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className={activeTab === "game" ? "h-full w-full" : ""}
+            className={activeTab === "game" ? "h-full w-full overflow-visible" : ""}
           >
             {children}
           </motion.div>
