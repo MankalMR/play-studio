@@ -19,9 +19,9 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
   });
   const { isImmersive } = useInterfaceStore();
   
-  // Lock body scroll when a game is active
+  // Lock body scroll strictly during immersive gameplay
   useEffect(() => {
-    if (activeTab === "game") {
+    if (isImmersive) {
       document.body.style.overflow = "hidden";
       document.documentElement.style.overflow = "hidden";
     } else {
@@ -33,7 +33,7 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
       document.body.style.overflow = "auto";
       document.documentElement.style.overflow = "auto";
     };
-  }, [activeTab]);
+  }, [isImmersive]);
 
   return (
     <div className={`min-h-screen flex flex-col transition-colors duration-500 texture-linen selection:bg-primary/30 
@@ -131,7 +131,7 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
         isImmersive 
           ? "h-screen overflow-hidden touch-none" 
           : activeTab === "game" 
-            ? "h-[calc(100vh-theme(spacing.16))] overflow-hidden touch-none" 
+            ? "h-[calc(100vh-theme(spacing.16))] overflow-auto" 
             : "pb-32 max-w-7xl mx-auto"
       }`}>
         <AnimatePresence mode="wait">

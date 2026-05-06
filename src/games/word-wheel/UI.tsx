@@ -12,6 +12,7 @@ import CrosswordGrid from "./components/CrosswordGrid";
 import useAudio from "./hooks/useAudio";
 import { getPath } from "./utils/path";
 import InfoDialog from './components/builds/infoDialog.tsx'
+import { useImmersiveMode } from "../../hooks/useImmersiveMode";
 
 const LEVEL_1_PUZZLE: Puzzle = {
   difficulty: 1,
@@ -42,6 +43,7 @@ const WordWheelGame: React.FC = () => {
   const usedWordsHistory = useRef<string[]>([]);
   const activeFetch = useRef<{ level: number; promise: Promise<Puzzle> } | null>(null);
   const { playForeground } = useAudio();
+  useImmersiveMode(!state.showLevelModal && !state.gameWon && !state.loading);
 
   const footerTarget = document.getElementById('footer-portal-target');
   const overrideFooterStyle = `

@@ -5,6 +5,7 @@ import { BoardSize, BoggleBoard, BoggleTile, WordPath } from "./types";
 import { generateBoard, calculateScore, areAdjacent, generateSeed } from "./engine";
 import { loadDictionary, isValidWord, isDictionaryReady } from "../../lib/wordEngine";
 import BoggleSetup from "./Setup";
+import { useImmersiveMode } from "../../hooks/useImmersiveMode";
 
 interface BoggleUIProps {
   onShowRules: () => void;
@@ -35,6 +36,8 @@ export default function BoggleUI({ onShowRules }: BoggleUIProps) {
   useEffect(() => {
     loadDictionary();
   }, []);
+
+  useImmersiveMode(gameState === "playing");
 
   // Timer logic
   useEffect(() => {

@@ -14,7 +14,7 @@ import { Effects } from './components/World/Effects';
 import { HUD } from './components/UI/HUD';
 import { useStore } from './store';
 import { GameStatus } from './types';
-import { useInterfaceStore } from '../../store/interfaceStore';
+import { useImmersiveMode } from '../../hooks/useImmersiveMode';
 
 // Dynamic Camera Controller
 const CameraController = () => {
@@ -71,19 +71,8 @@ function Scene() {
 
 function MankalaRunner() {
   const status = useStore((state) => state.status);
-  const setImmersive = useInterfaceStore((state) => state.setImmersive);
 
-  React.useEffect(() => {
-    // Hide navigation when playing or in shop
-    if (status === GameStatus.PLAYING || status === GameStatus.SHOP) {
-      setImmersive(true);
-    } else {
-      setImmersive(false);
-    }
-
-    // Cleanup when leaving the game tab
-    return () => setImmersive(false);
-  }, [status, setImmersive]);
+  useImmersiveMode(status === GameStatus.PLAYING || status === GameStatus.SHOP);
 
   return (
     <div className="relative w-full h-full bg-black overflow-hidden select-none">

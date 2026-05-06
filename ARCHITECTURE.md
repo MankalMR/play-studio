@@ -51,3 +51,10 @@ To ensure deep links (e.g., `/word-wheel`) don't 404 on refresh and are indexed 
 - **Three.js & R3F**: For 3D immersive experiences like Mankala Runner.
 - **Lucide React**: Minimalist iconography.
 - **React Helmet Async**: For SEO and dynamic document titles.
+- **Zustand**: For lightweight global state management (Interface Store).
+
+## 6. Immersive Interface System
+To maximize screen real-estate during active gameplay, the Arcade uses a centralized visibility system.
+- **`interfaceStore.ts`**: A Zustand store tracking `isImmersive`.
+- **`useImmersiveMode` hook**: A shared hook used by all games to toggle immersion based on game-specific states (e.g., Playing vs. Game Over).
+- **Conditional Layout**: `Layout.tsx` reactively hides the header/nav and locks the browser viewport (to prevent pull-to-refresh jitter) only when the immersive flag is active.

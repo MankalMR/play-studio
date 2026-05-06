@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo } from "react";
 import { Undo, RotateCcw, Lightbulb, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import * as Engine from "./engine";
+import { useImmersiveMode } from "../../hooks/useImmersiveMode";
 
 interface UIProps {
   onShowRules: () => void;
@@ -19,9 +20,10 @@ export default function PegSolitaireUI({ onShowRules }: UIProps) {
   const isStuck = !hasMoves && !isWon;
 
   const legalMoves = useMemo(() => {
-    if (!selected) return [];
     return Engine.getLegalMoves(board, selected);
   }, [board, selected]);
+
+  useImmersiveMode(!isWon && !isStuck);
 
   const handleCellClick = (r: number, c: number) => {
     if (isWon || isStuck) return;

@@ -20,6 +20,7 @@ import { TimerIcon } from "./components/Icons";
 import InfoDialog from './components/InfoDialog';
 import { motion, AnimatePresence } from 'motion/react';
 import { Gamepad2 } from 'lucide-react';
+import { useImmersiveMode } from '../../hooks/useImmersiveMode';
 
 const StretchyCatGame: React.FC = () => {
   const navigate = useNavigate();
@@ -41,6 +42,8 @@ const StretchyCatGame: React.FC = () => {
   const [timeBonuses, setTimeBonuses] = useState<{id: number; x: number; y: number; text: string; color: string}[]>([]);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [pauseStartTime, setPauseStartTime] = useState<number>(0);
+
+  useImmersiveMode(!gameResult);
 
   const isPaused = false;
 
