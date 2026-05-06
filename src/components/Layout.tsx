@@ -31,10 +31,10 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
           <Settings size={20} />
         </button>
         <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="The Archive" className="w-8 h-8 object-contain" />
+          <img src="/logo.png" alt="The Mankala Arcade" className="w-8 h-8 object-contain" />
           <h1 className={`font-serif italic text-lg font-bold tracking-tight transition-colors duration-300
             ${settings.darkMode ? 'text-primary' : 'text-[#416352]'}`}>
-            {title || "The Archive"}
+            {title || "The Mankala Arcade"}
           </h1>
         </div>
         <button 
@@ -99,7 +99,7 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
                 />
               </div>
               <div className={`${settings.darkMode ? 'bg-white/5' : 'bg-black/5'} p-6 text-center`}>
-                <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 font-manrope">Version 1.0.4 • The Archive</p>
+                <p className="text-[10px] uppercase tracking-widest font-bold text-zinc-500 font-manrope">Version 1.0.4 • The Mankala Arcade</p>
               </div>
             </motion.div>
           </div>

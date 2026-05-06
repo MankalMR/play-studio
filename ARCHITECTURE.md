@@ -1,6 +1,6 @@
-# Architecture Overview: The Archive
+# Architecture Overview: The Mankala Arcade
 
-The Archive is a premium, web-based collection of classic board games and puzzles, built with React, Vite, and Tailwind CSS 4.0.
+The Mankala Arcade is a premium, web-based collection of classic board games and puzzles, built with React, Vite, and Tailwind CSS 4.0.
 
 ## Project Philosophy
 The project aims for a "Physical Heirloom" aesthetic—using dark themes, serif typography, linen textures, and smooth animations to evoke the feeling of a high-end parlor game collection.
@@ -12,7 +12,7 @@ graph TD
     App[App.tsx] --> Registry[GAMES_REGISTRY]
     App --> Layout[Layout.tsx]
     Layout --> Screens[Screens: Home]
-    Screens --> Games[Games: Boggle, Peg Solitaire, Wordwheel]
+    Screens --> Games[Games: Boggle, Peg Solitaire, Wordwheel, Stretchy Cat, Mankala Runner]
     Games --> SharedLib[src/lib: wordEngine]
 ```
 
@@ -48,5 +48,6 @@ To ensure deep links (e.g., `/word-wheel`) don't 404 on refresh and are indexed 
 - **React 19**: Modern UI framework.
 - **Vite 6**: Fast development and build tool.
 - **Motion (Framer Motion)**: For tactile, physical-feeling transitions.
+- **Three.js & R3F**: For 3D immersive experiences like Mankala Runner.
 - **Lucide React**: Minimalist iconography.
 - **React Helmet Async**: For SEO and dynamic document titles.

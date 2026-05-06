@@ -16,6 +16,7 @@ import BoggleRules from "./games/boggle/Rules.tsx";
 import WordWheelUI from "./games/word-wheel/UI.tsx";
 import WordWheelRules from "./games/word-wheel/Rules.tsx";
 import { UI as StretchyCatUI, Rules as StretchyCatRules } from "./games/stretchy-cat/index.ts";
+import { UI as MankalaRunnerUI, Rules as MankalaRunnerRules } from "./games/mankala-runner/index.ts";
 
 function GameWrapper() {
   const { gameId } = useParams();
@@ -25,7 +26,7 @@ function GameWrapper() {
     return (
       <>
         <Helmet>
-          <title>Peg Solitaire - The Archive</title>
+          <title>Peg Solitaire - The Mankala Arcade</title>
           <meta name="description" content="Play the classic Peg Solitaire board game. Strategy and logic in a premium parlor theme." />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
         </Helmet>
@@ -38,7 +39,7 @@ function GameWrapper() {
     return (
       <>
         <Helmet>
-          <title>Boggle - The Archive</title>
+          <title>Boggle - The Mankala Arcade</title>
           <meta name="description" content="Play the fast-paced word discovery game. Hunt for words in a scrambled grid." />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
         </Helmet>
@@ -51,7 +52,7 @@ function GameWrapper() {
     return (
       <>
         <Helmet>
-          <title>Wordwheel Cross - The Archive</title>
+          <title>Wordwheel Cross - The Mankala Arcade</title>
           <meta name="description" content="Spin to find, place to cross. A hybrid word discovery and crossword experience." />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
         </Helmet>
@@ -64,11 +65,24 @@ function GameWrapper() {
     return (
       <>
         <Helmet>
-          <title>Stretchy Cat - The Archive</title>
+          <title>Stretchy Cat - The Mankala Arcade</title>
           <meta name="description" content="Stretch the cat to fill the board. A tactile path-finding puzzle." />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
         </Helmet>
         <StretchyCatUI />
+      </>
+    );
+  }
+
+  if (gameId === "mankala-runner") {
+    return (
+      <>
+        <Helmet>
+          <title>Mankala Runner - The Mankala Arcade</title>
+          <meta name="description" content="Race through a stunning synthwave cosmos. High-speed 3D arcade action." />
+          <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
+        </Helmet>
+        <MankalaRunnerUI />
       </>
     );
   }
@@ -89,7 +103,7 @@ function RulesWrapper() {
     return (
       <>
         <Helmet>
-          <title>Rules: Peg Solitaire - The Archive</title>
+          <title>Rules: Peg Solitaire - The Mankala Arcade</title>
           <meta name="description" content="Learn how to play Peg Solitaire. Master the objective and moves of this classic strategy puzzle." />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}/rules`} />
         </Helmet>
@@ -102,7 +116,7 @@ function RulesWrapper() {
     return (
       <>
         <Helmet>
-          <title>Rules: Boggle - The Archive</title>
+          <title>Rules: Boggle - The Mankala Arcade</title>
           <meta name="description" content="Learn how to play Boggle. Find words, score points, and beat the clock." />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}/rules`} />
         </Helmet>
@@ -115,7 +129,7 @@ function RulesWrapper() {
     return (
       <>
         <Helmet>
-          <title>Rules: Wordwheel Cross - The Archive</title>
+          <title>Rules: Wordwheel Cross - The Mankala Arcade</title>
           <meta name="description" content="Learn how to play Wordwheel Cross. Master the spin and solve the grid." />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}/rules`} />
         </Helmet>
@@ -128,11 +142,24 @@ function RulesWrapper() {
     return (
       <>
         <Helmet>
-          <title>Rules: Stretchy Cat - The Archive</title>
+          <title>Rules: Stretchy Cat - The Mankala Arcade</title>
           <meta name="description" content="Learn how to play Stretchy Cat. Master the stretch and fill the grid." />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}/rules`} />
         </Helmet>
         <StretchyCatRules onStart={() => navigate(`/stretchy-cat`)} />
+      </>
+    );
+  }
+
+  if (gameId === "mankala-runner") {
+    return (
+      <>
+        <Helmet>
+          <title>Rules: Mankala Runner - The Mankala Arcade</title>
+          <meta name="description" content="Learn how to master the synthwave cosmos in Mankala Runner. Controls and objective guide." />
+          <link rel="canonical" href={`https://play.mankala.space/${gameId}/rules`} />
+        </Helmet>
+        <MankalaRunnerRules onStart={() => navigate(`/mankala-runner`)} />
       </>
     );
   }
@@ -151,9 +178,9 @@ function AppContent() {
   };
 
   const getActiveGameTitle = (): string => {
-    if (location.pathname === "/") return "The Archive";
+    if (location.pathname === "/") return "The Mankala Arcade";
     const game = GAMES_REGISTRY.find(g => location.pathname.includes(g.id));
-    return game ? game.title : "The Archive";
+    return game ? game.title : "The Mankala Arcade";
   };
 
   return (
@@ -170,7 +197,7 @@ function AppContent() {
         <Route path="/" element={
           <>
             <Helmet>
-              <title>The Archive - Classic Game Collection</title>
+              <title>The Mankala Arcade - Classic Game Collection</title>
               <meta name="description" content="A curated collection of classic tactile puzzles and board games. Play Peg Solitaire, Rummy, and more." />
               <link rel="canonical" href="https://play.mankala.space/" />
             </Helmet>

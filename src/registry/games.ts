@@ -48,7 +48,17 @@ export const GAMES_REGISTRY: GameMetadata[] = [
     category: ["Puzzle", "Logic"],
     status: "playable",
     thumbnail: "/stretchy-cat-thumb.png",
-    description: "Stretch the feline across the board to fill every space. A tactile, physics-based puzzle experience in the Archive collection.",
+    description: "Stretch the feline across the board to fill every space. A tactile, physics-based puzzle experience in the Mankala Arcade collection.",
     duration: "2-5 Min"
+  },
+  {
+    id: "mankala-runner",
+    title: "Mankala Runner",
+    subtitle: "Cosmic Arcade",
+    category: ["Arcade", "Action"],
+    status: "playable",
+    thumbnail: "/mankala-runner-thumb.png",
+    description: "Race through a stunning synthwave cosmos at breakneck speeds in this retro-futuristic 3D runner.",
+    duration: "1-3 Min"
   }
 ];

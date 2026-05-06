@@ -40,6 +40,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Mankala Runner -->
+  <url>
+    <loc>https://play.mankala.space/mankala-runner</loc>
+    <lastmod>2026-05-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
   <!-- Rules Pages -->
   <url>
     <loc>https://play.mankala.space/word-wheel/rules</loc>

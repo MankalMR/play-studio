@@ -1,6 +1,6 @@
 # Project Navigation for Agents
 
-Welcome, Agent. This project, **The Archive**, is a modular React application designed for extensibility and high-fidelity UI. Use this guide to navigate the codebase efficiently.
+Welcome, Agent. This project, **The Mankala Arcade**, is a modular React application designed for extensibility and high-fidelity UI. Use this guide to navigate the codebase efficiently.
 
 <details>
 <summary><b>1. Core Application Logic</b></summary>
@@ -33,6 +33,7 @@ Each game is self-contained. Navigate to `src/games/[game-id]/` to find:
 - [Peg Solitaire](src/games/peg-solitaire/)
 - [Wordwheel Cross](src/games/word-wheel/)
 - [Stretchy Cat](src/games/stretchy-cat/)
+- [Mankala Runner](src/games/mankala-runner/)
 
 </details>
 
