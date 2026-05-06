@@ -28,6 +28,10 @@ function GameWrapper() {
         <Helmet>
           <title>Peg Solitaire - The Mankala Arcade</title>
           <meta name="description" content="Play the classic Peg Solitaire board game. Strategy and logic in a premium parlor theme." />
+          <meta property="og:title" content="Peg Solitaire - The Mankala Arcade" />
+          <meta property="og:description" content="Play the classic Peg Solitaire board game. Strategy and logic in a premium parlor theme." />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={`https://play.mankala.space/${gameId}`} />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
         </Helmet>
         <PegSolitaireUI onShowRules={() => navigate(`/peg-solitaire/rules`)} />
@@ -41,6 +45,11 @@ function GameWrapper() {
         <Helmet>
           <title>Boggle - The Mankala Arcade</title>
           <meta name="description" content="Play the fast-paced word discovery game. Hunt for words in a scrambled grid." />
+          <meta property="og:title" content="Boggle - The Mankala Arcade" />
+          <meta property="og:description" content="Play the fast-paced word discovery game. Hunt for words in a scrambled grid." />
+          <meta property="og:image" content="https://play.mankala.space/boggle-thumb.png" />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={`https://play.mankala.space/${gameId}`} />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
         </Helmet>
         <BoggleUI onShowRules={() => navigate(`/boggle/rules`)} />
@@ -54,6 +63,11 @@ function GameWrapper() {
         <Helmet>
           <title>Wordwheel Cross - The Mankala Arcade</title>
           <meta name="description" content="Spin to find, place to cross. A hybrid word discovery and crossword experience." />
+          <meta property="og:title" content="Wordwheel Cross - The Mankala Arcade" />
+          <meta property="og:description" content="Spin to find, place to cross. A hybrid word discovery and crossword experience." />
+          <meta property="og:image" content="https://play.mankala.space/word-wheel-thumb.png" />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={`https://play.mankala.space/${gameId}`} />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
         </Helmet>
         <WordWheelUI />
@@ -67,6 +81,11 @@ function GameWrapper() {
         <Helmet>
           <title>Stretchy Cat - The Mankala Arcade</title>
           <meta name="description" content="Stretch the cat to fill the board. A tactile path-finding puzzle." />
+          <meta property="og:title" content="Stretchy Cat - The Mankala Arcade" />
+          <meta property="og:description" content="Stretch the cat to fill the board. A tactile path-finding puzzle." />
+          <meta property="og:image" content="https://play.mankala.space/stretchy-cat-thumb.png" />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={`https://play.mankala.space/${gameId}`} />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
         </Helmet>
         <StretchyCatUI />
@@ -80,6 +99,11 @@ function GameWrapper() {
         <Helmet>
           <title>Mankala Runner - The Mankala Arcade</title>
           <meta name="description" content="Race through a stunning synthwave cosmos. High-speed 3D arcade action." />
+          <meta property="og:title" content="Mankala Runner - The Mankala Arcade" />
+          <meta property="og:description" content="Race through a stunning synthwave cosmos. High-speed 3D arcade action." />
+          <meta property="og:image" content="https://play.mankala.space/mankala-runner-thumb.png" />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={`https://play.mankala.space/${gameId}`} />
           <link rel="canonical" href={`https://play.mankala.space/${gameId}`} />
         </Helmet>
         <MankalaRunnerUI />
@@ -199,6 +223,11 @@ function AppContent() {
             <Helmet>
               <title>The Mankala Arcade - Classic Game Collection</title>
               <meta name="description" content="A curated collection of classic tactile puzzles and board games. Play Peg Solitaire, Rummy, and more." />
+              <meta property="og:title" content="The Mankala Arcade - Classic Game Collection" />
+              <meta property="og:description" content="A curated collection of classic tactile puzzles and board games." />
+              <meta property="og:image" content="https://play.mankala.space/logo.png" />
+              <meta property="og:type" content="website" />
+              <meta property="og:url" content="https://play.mankala.space/" />
               <link rel="canonical" href="https://play.mankala.space/" />
             </Helmet>
             <Home onSelectGame={(id, view) => navigate(view === "rules" ? `/${id}/rules` : `/${id}`)} />
