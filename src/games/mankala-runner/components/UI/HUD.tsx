@@ -132,7 +132,7 @@ export const HUD: React.FC = () => {
                      <div className="absolute inset-0 bg-gradient-to-t from-[#050011] via-black/30 to-transparent"></div>
                      
                      {/* Content positioned at the bottom of the card */}
-                     <div className="absolute inset-0 flex flex-col justify-end items-center p-6 pb-8 text-center z-10">
+                     <div className="absolute inset-0 flex flex-col justify-end items-center p-6 pb-20 text-center z-10">
                         <button 
                           onClick={() => { audio.init(); startGame(); }}
                           className="w-full group relative px-6 py-4 bg-white text-black font-black text-xl rounded-full hover:bg-zinc-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] overflow-hidden"
@@ -155,7 +155,7 @@ export const HUD: React.FC = () => {
   if (status === GameStatus.GAME_OVER) {
       return (
           <div className="absolute inset-0 bg-black/90 z-[100] text-white pointer-events-auto backdrop-blur-sm overflow-y-auto">
-              <div className="flex flex-col items-center justify-center min-h-full py-8 px-4">
+              <div className="flex flex-col items-center justify-center min-h-full py-8 pb-32 px-4">
                 <h1 className="text-4xl md:text-6xl font-black text-white mb-6 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)] font-serif italic text-center uppercase tracking-tighter">GAME OVER</h1>
                 
                 <div className="grid grid-cols-1 gap-3 md:gap-4 text-center mb-8 w-full max-w-md">

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Settings, BookOpen, LayoutGrid, Play, X, Volume2, Moon, Eye } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { useInterfaceStore } from "../store/interfaceStore";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
     darkMode: true,
     highContrast: false
   });
+  const { isImmersive } = useInterfaceStore();
   
   // Lock body scroll when a game is active
   useEffect(() => {
@@ -38,28 +40,30 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
       ${settings.darkMode ? 'dark bg-bg-dark text-white' : 'bg-[#fff8f4] text-[#1f1b17]'}
       ${settings.highContrast ? 'contrast-125' : ''}`}>
       {/* Header */}
-      <header className={`sticky top-0 z-50 backdrop-blur-md border-b px-6 h-16 flex items-center justify-between transition-colors duration-300
-        ${settings.darkMode ? 'bg-bg-dark/80 border-white/5' : 'bg-[#fff8f4]/80 border-black/5 shadow-sm'}`}>
-        <button 
-          onClick={() => setIsSettingsOpen(true)}
-          className={`p-2 transition-colors ${settings.darkMode ? 'text-zinc-500 hover:text-primary' : 'text-zinc-400 hover:text-[#416352]'}`}
-        >
-          <Settings size={20} />
-        </button>
-        <div className="flex items-center gap-3">
-          <img src="/logo.png" alt="The Mankala Arcade" className="w-8 h-8 object-contain" />
-          <h1 className={`font-serif italic text-lg font-bold tracking-tight transition-colors duration-300
-            ${settings.darkMode ? 'text-primary' : 'text-[#416352]'}`}>
-            {title || "The Mankala Arcade"}
-          </h1>
-        </div>
-        <button 
-          onClick={() => onTabChange("rules")}
-          className={`p-2 transition-colors ${activeTab === 'rules' ? (settings.darkMode ? 'text-primary' : 'text-[#416352]') : 'text-zinc-500 hover:text-primary'}`}
-        >
-          <BookOpen size={20} />
-        </button>
-      </header>
+      {!isImmersive && (
+        <header className={`sticky top-0 z-50 backdrop-blur-md border-b px-6 h-16 flex items-center justify-between transition-colors duration-300
+          ${settings.darkMode ? 'bg-bg-dark/80 border-white/5' : 'bg-[#fff8f4]/80 border-black/5 shadow-sm'}`}>
+          <button 
+            onClick={() => setIsSettingsOpen(true)}
+            className={`p-2 transition-colors ${settings.darkMode ? 'text-zinc-500 hover:text-primary' : 'text-zinc-400 hover:text-[#416352]'}`}
+          >
+            <Settings size={20} />
+          </button>
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="The Mankala Arcade" className="w-8 h-8 object-contain" />
+            <h1 className={`font-serif italic text-lg font-bold tracking-tight transition-colors duration-300
+              ${settings.darkMode ? 'text-primary' : 'text-[#416352]'}`}>
+              {title || "The Mankala Arcade"}
+            </h1>
+          </div>
+          <button 
+            onClick={() => onTabChange("rules")}
+            className={`p-2 transition-colors ${activeTab === 'rules' ? (settings.darkMode ? 'text-primary' : 'text-[#416352]') : 'text-zinc-500 hover:text-primary'}`}
+          >
+            <BookOpen size={20} />
+          </button>
+        </header>
+      )}
 
       {/* Settings Modal */}
       <AnimatePresence>
@@ -124,9 +128,11 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
 
       {/* Main Content */}
       <main className={`flex-grow w-full ${
-        activeTab === "game" 
-          ? "h-[calc(100vh-theme(spacing.16))] overflow-hidden touch-none" 
-          : "pb-32 max-w-7xl mx-auto"
+        isImmersive 
+          ? "h-screen overflow-hidden touch-none" 
+          : activeTab === "game" 
+            ? "h-[calc(100vh-theme(spacing.16))] overflow-hidden touch-none" 
+            : "pb-32 max-w-7xl mx-auto"
       }`}>
         <AnimatePresence mode="wait">
           <motion.div
@@ -142,31 +148,33 @@ export default function Layout({ children, activeTab, onTabChange, title }: Layo
         </AnimatePresence>
       </main>
 
-      {/* Bottom Nav (Mobile) */}
-      <nav className={`md:hidden fixed bottom-0 left-0 w-full z-40 backdrop-blur-lg border-t px-6 h-20 flex justify-around items-center transition-colors duration-300
-        ${settings.darkMode ? 'bg-bg-dark/90 border-white/5' : 'bg-white/90 border-black/5 shadow-[0_-4px_10px_rgba(0,0,0,0.02)]'}`}>
-        <NavButton 
-          active={activeTab === "home"} 
-          onClick={() => onTabChange("home")}
-          icon={<LayoutGrid size={24} />}
-          label="Shelf"
-          darkMode={settings.darkMode}
-        />
-        <NavButton 
-          active={activeTab === "game"} 
-          onClick={() => onTabChange("game")}
-          icon={<Play size={24} />}
-          label="Play"
-          darkMode={settings.darkMode}
-        />
-        <NavButton 
-          active={activeTab === "rules"} 
-          onClick={() => onTabChange("rules")}
-          icon={<BookOpen size={24} />}
-          label="Rules"
-          darkMode={settings.darkMode}
-        />
-      </nav>
+      {/* Bottom Nav (Mobile/Desktop) */}
+      {!isImmersive && (
+        <nav className={`fixed bottom-0 left-0 w-full z-[999] backdrop-blur-lg border-t px-6 h-20 flex justify-around items-center transition-colors duration-300 pb-safe
+          ${settings.darkMode ? 'bg-bg-dark/90 border-white/5' : 'bg-white/90 border-black/5 shadow-[0_-4px_10px_rgba(0,0,0,0.02)]'}`}>
+          <NavButton 
+            active={activeTab === "home"} 
+            onClick={() => onTabChange("home")}
+            icon={<LayoutGrid size={24} />}
+            label="Shelf"
+            darkMode={settings.darkMode}
+          />
+          <NavButton 
+            active={activeTab === "game"} 
+            onClick={() => onTabChange("game")}
+            icon={<Play size={24} />}
+            label="Play"
+            darkMode={settings.darkMode}
+          />
+          <NavButton 
+            active={activeTab === "rules"} 
+            onClick={() => onTabChange("rules")}
+            icon={<BookOpen size={24} />}
+            label="Rules"
+            darkMode={settings.darkMode}
+          />
+        </nav>
+      )}
     </div>
   );
 }
