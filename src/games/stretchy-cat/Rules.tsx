@@ -2,7 +2,11 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Trophy, Clock, Fish, Star, Goal } from 'lucide-react';
 
-const Rules: React.FC = () => {
+interface RulesProps {
+  onStart: () => void;
+}
+
+const Rules: React.FC<RulesProps> = ({ onStart }) => {
   return (
     <div className="max-w-2xl mx-auto py-12 px-6 text-white/80">
       <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white mb-8">How to Play</h2>
@@ -59,10 +63,21 @@ const Rules: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="mt-12 p-8 bg-indigo-600/20 border border-indigo-500/30 rounded-3xl text-center"
+        className="mt-12 p-8 bg-indigo-600/20 border border-indigo-500/30 rounded-3xl text-center flex flex-col items-center gap-6"
       >
-        <p className="text-lg font-medium text-white mb-2 italic">Ready for the challenge?</p>
-        <p className="text-sm opacity-60">The clock is ticking, but the cat is ready.</p>
+        <div>
+          <p className="text-lg font-medium text-white mb-2 italic">Ready for the challenge?</p>
+          <p className="text-sm opacity-60">The clock is ticking, but the cat is ready.</p>
+        </div>
+
+        <motion.button
+          whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,1)", color: "#000" }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onStart}
+          className="px-12 py-4 bg-white/90 text-black rounded-full font-black text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-colors"
+        >
+          Begin Game
+        </motion.button>
       </motion.div>
     </div>
   );
