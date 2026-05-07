@@ -1,4 +1,4 @@
-import { BoggleBoard, BoardSize, BoggleTile } from "./types";
+import type { BoggleBoard, BoardSize, BoggleTile } from "./types.ts";
 
 // Standard Boggle Dice (Classic and Big)
 const DICE_4X4 = [
@@ -77,7 +77,7 @@ export function generateBoard(size: BoardSize, seed: string): BoggleBoard {
 export function calculateScore(word: string | undefined, size: BoardSize, minWordLength: number): number {
   if (!word) return 0;
   const len = word.length;
-  if (len < minWordLength) return 0;
+  if (len < minWordLength || len < 3) return 0;
   
   if (len === 3) return 1;
   if (len === 4) return 2;
