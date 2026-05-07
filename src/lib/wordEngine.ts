@@ -15,7 +15,6 @@ export async function loadDictionary(): Promise<void> {
     const text = await response.text();
     const words = text.split("\n").map(w => w.trim().toUpperCase()).filter(w => w.length >= 3);
     dictionary = new Set(words);
-    console.log(`Dictionary loaded: ${dictionary.size} words`);
   } catch (error) {
     console.error("Failed to load dictionary", error);
     // Fallback: minimal dictionary if fetch fails
