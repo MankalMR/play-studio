@@ -1,4 +1,5 @@
 import express from "express";
+import helmet from "helmet";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -9,6 +10,21 @@ const __dirname = path.dirname(__filename);
 async function startServer() {
   const app = express();
   const PORT = 3000;
+
+  // Use helmet for industry-standard security headers
+  app.use(
+    helmet({
+      contentSecurityPolicy: {
+        directives: {
+          ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+          "script-src": ["'self'", "'unsafe-inline'"],
+          "font-src": ["'self'", "https:", "data:"],
+          "img-src": ["'self'", "data:"],
+          "style-src": ["'self'", "https:", "'unsafe-inline'"],
+        },
+      },
+    })
+  );
 
   // Health check
   app.get("/api/health", (req, res) => {
