@@ -5,15 +5,69 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="google-site-verification" content="d8bi7pWiOYIQ6eL6MFYAicUcOKZvVogwcl5JE-7u0So" />
-  <title>The Mankala Arcade</title>
+  <title>The Mankala Arcade | Premium Classic Game Collection</title>
+  <meta name="description" content="A curated collection of premium, tactile digital board games and puzzles. Play Mankala Runner, Boggle, Peg Solitaire, and more for free in your browser." />
+  <meta name="keywords" content="mankala, boggle, peg solitaire, word wheel, stretchy cat, online games, board games, browser games, free puzzles" />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://play.mankala.space/" />
+  <meta property="og:title" content="The Mankala Arcade | Premium Classic Game Collection" />
+  <meta property="og:description" content="A curated collection of premium, tactile digital board games and puzzles. Play Mankala Runner, Boggle, and more." />
+  <meta property="og:image" content="https://play.mankala.space/logo.png" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://play.mankala.space/" />
+  <meta property="twitter:title" content="The Mankala Arcade | Premium Classic Game Collection" />
+  <meta property="twitter:description" content="A curated collection of premium, tactile digital board games and puzzles." />
+  <meta property="twitter:image" content="https://play.mankala.space/logo.png" />
+
   <link rel="icon" type="image/png" href="/logo.png" />
   <link
     href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap"
     rel="stylesheet">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "The Mankala Arcade",
+      "applicationCategory": "GameApplication",
+      "operatingSystem": "Web Browser",
+      "description": "A curated collection of premium tactile puzzles and board games including Mankala Runner, Boggle, and Peg Solitaire.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Mankala Runner - 3D Synthwave Action",
+        "Boggle - Fast-paced Word Discovery",
+        "Peg Solitaire - Classic Logic Puzzle",
+        "Wordwheel Cross - Word Search Hybrid",
+        "Stretchy Cat - Pathfinding Puzzle"
+      ]
+    }
+  </script>
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <!-- Static content for SEO crawlers - hidden once React hydrates -->
+    <div style="display: none;" aria-hidden="true">
+      <h1>The Mankala Arcade</h1>
+      <p>A curated collection of premium classic games and puzzles.</p>
+      <ul>
+        <li><a href="/mankala-runner">Mankala Runner - 3D Arcade</a></li>
+        <li><a href="/boggle">Boggle - Word Discovery</a></li>
+        <li><a href="/peg-solitaire">Peg Solitaire - Strategy Puzzle</a></li>
+        <li><a href="/word-wheel">Wordwheel Cross - Word Game</a></li>
+        <li><a href="/stretchy-cat">Stretchy Cat - Puzzle Game</a></li>
+      </ul>
+    </div>
+  </div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 
