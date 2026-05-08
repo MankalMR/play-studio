@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useStore, MANKALA_TARGET } from '../../store';
 import { GameObject, ObjectType, LANE_WIDTH, SPAWN_DISTANCE, REMOVE_DISTANCE, GameStatus, MANKALA_COLORS } from '../../types';
 import { audio } from '../System/Audio';
+import { shuffle } from '../../../../lib/utils';
 
 // Geometry Constants
 const OBSTACLE_HEIGHT = 1.6;
@@ -456,7 +457,7 @@ export const LevelManager: React.FC = () => {
                     const availableLanes = [];
                     const maxLane = Math.floor(laneCount / 2);
                     for (let i = -maxLane; i <= maxLane; i++) availableLanes.push(i);
-                    availableLanes.sort(() => Math.random() - 0.5);
+                    shuffle(availableLanes);
 
                     // Determine how many aliens to spawn (1 to 3, based on probability)
                     let alienCount = 1;
@@ -487,7 +488,7 @@ export const LevelManager: React.FC = () => {
                     const availableLanes = [];
                     const maxLane = Math.floor(laneCount / 2);
                     for (let i = -maxLane; i <= maxLane; i++) availableLanes.push(i);
-                    availableLanes.sort(() => Math.random() - 0.5);
+                    shuffle(availableLanes);
                     
                     let countToSpawn = 1;
                     const p = Math.random();
