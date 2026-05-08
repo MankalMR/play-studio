@@ -9,6 +9,7 @@ import { Heart, Zap, Trophy, MapPin, Diamond, Rocket, ArrowUpCircle, Shield, Act
 import { useStore, MANKALA_TARGET } from '../../store';
 import { GameStatus, MANKALA_COLORS, ShopItem, RUN_SPEED_BASE } from '../../types';
 import { audio } from '../System/Audio';
+import { shuffle } from '../../../../lib/utils';
 
 // Available Shop Items
 const SHOP_ITEMS: ShopItem[] = [
@@ -57,7 +58,7 @@ const ShopScreen: React.FC = () => {
         });
 
         // Shuffle and pick 3
-        pool = pool.sort(() => 0.5 - Math.random());
+        shuffle(pool);
         setItems(pool.slice(0, 3));
     }, []);
 

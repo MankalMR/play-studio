@@ -6,6 +6,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import useAudio from "../hooks/useAudio";
 import { getPath } from "../utils/path";
+import { shuffle } from "../../../lib/utils";
 
 interface WordWheelProps {
   letters: string;
@@ -25,11 +26,11 @@ const WordWheel: React.FC<WordWheelProps> = ({ letters, onWordSubmit, onCurrentW
   const letterArray = useMemo(() => letters.split(""), [letters]);
 
   const [shuffledIndices, setShuffledIndices] = useState<number[]>(() =>
-    Array.from({ length: letters.length }, (_, i) => i).sort(() => Math.random() - 0.5)
+    shuffle(Array.from({ length: letters.length }, (_, i) => i))
   );
 
   const handleShuffle = () => {
-    setShuffledIndices(prev => [...prev].sort(() => Math.random() - 0.5));
+    setShuffledIndices(prev => shuffle([...prev]));
     playForeground(getPath("/media/audio/sfx/wordwheel/letterselect.mp3"));
   };
 
