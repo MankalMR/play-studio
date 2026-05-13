@@ -8,11 +8,12 @@ import React, { useRef, useEffect, useState, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { Text3D, Center, Float } from '@react-three/drei';
-import { v4 as uuidv4 } from 'uuid';
 import { useStore, MANKALA_TARGET } from '../../store';
 import { GameObject, ObjectType, LANE_WIDTH, SPAWN_DISTANCE, REMOVE_DISTANCE, GameStatus, MANKALA_COLORS } from '../../types';
 import { audio } from '../System/Audio';
 import { shuffle } from '../../../../lib/utils';
+
+let nextObjectId = 1;
 
 // Geometry Constants
 const OBSTACLE_HEIGHT = 1.6;
@@ -203,7 +204,7 @@ export const LevelManager: React.FC = () => {
 
         // Spawn Shop Portal further out (Twice previous distance)
         objectsRef.current.push({
-            id: uuidv4(),
+            id: `obj_${nextObjectId++}`,
             type: ObjectType.SHOP_PORTAL,
             position: [0, 0, -100], 
             active: true,
@@ -274,7 +275,7 @@ export const LevelManager: React.FC = () => {
                  
                  // Spawn Missile
                  newSpawns.push({
-                     id: uuidv4(),
+                     id: `obj_${nextObjectId++}`,
                      type: ObjectType.MISSILE,
                      position: [obj.position[0], 1.0, obj.position[2] + 2], // Spawn slightly in front
                      active: true,
@@ -418,7 +419,7 @@ export const LevelManager: React.FC = () => {
                  const color = MANKALA_COLORS[chosenIndex];
 
                  keptObjects.push({
-                    id: uuidv4(),
+                    id: `obj_${nextObjectId++}`,
                     type: ObjectType.LETTER,
                     position: [lane * LANE_WIDTH, 1.0, spawnZ], 
                     active: true,
@@ -433,7 +434,7 @@ export const LevelManager: React.FC = () => {
              } else {
                 // Fallback to gem if all letters collected for this level
                 keptObjects.push({
-                    id: uuidv4(),
+                    id: `obj_${nextObjectId++}`,
                     type: ObjectType.GEM,
                     position: [lane * LANE_WIDTH, 1.2, spawnZ],
                     active: true,
@@ -475,7 +476,7 @@ export const LevelManager: React.FC = () => {
                     for (let k = 0; k < alienCount; k++) {
                         const lane = availableLanes[k];
                         keptObjects.push({
-                            id: uuidv4(),
+                            id: `obj_${nextObjectId++}`,
                             type: ObjectType.ALIEN,
                             position: [lane * LANE_WIDTH, 1.5, spawnZ],
                             active: true,
@@ -510,7 +511,7 @@ export const LevelManager: React.FC = () => {
                         const laneX = lane * LANE_WIDTH;
                         
                         keptObjects.push({
-                            id: uuidv4(),
+                            id: `obj_${nextObjectId++}`,
                             type: ObjectType.OBSTACLE,
                             position: [laneX, OBSTACLE_HEIGHT / 2, spawnZ],
                             active: true,
@@ -520,7 +521,7 @@ export const LevelManager: React.FC = () => {
                         // Chance for gem on top of obstacle
                         if (Math.random() < 0.3) {
                              keptObjects.push({
-                                id: uuidv4(),
+                                id: `obj_${nextObjectId++}`,
                                 type: ObjectType.GEM,
                                 position: [laneX, OBSTACLE_HEIGHT + 1.0, spawnZ],
                                 active: true,
@@ -535,7 +536,7 @@ export const LevelManager: React.FC = () => {
                 // GROUND GEM SPAWNING
                 const lane = getRandomLane(laneCount);
                 keptObjects.push({
-                    id: uuidv4(),
+                    id: `obj_${nextObjectId++}`,
                     type: ObjectType.GEM,
                     position: [lane * LANE_WIDTH, 1.2, spawnZ],
                     active: true,
